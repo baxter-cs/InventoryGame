@@ -9,10 +9,15 @@
   <body>
 
     <div id="app">
-      <div>{{ item.name }}</div>
-      <input v-model="item.name" placeholder="edit me"/>
-      <input v-model="item.description" placeholder="edit me"/>
-      <button @click="newCard()">Done</button>
+        <div v-if="item">{{ item.name }}</div>
+        <input v-if="item" v-model="item.name" placeholder="edit me"/>
+        <input v-if="item" v-model="item.description" placeholder="edit me"/>
+      <button @click="newCard()">New Card</button>
+      <button v-if="items.length > 0" @click="drawCard()">Draw Card</button>
+      <!--div v-for "item in items">
+        <div>{{ item.name }}</div>
+      </div-->
+
     </div>
 
 
@@ -43,24 +48,25 @@
         }
       }
 
-      for (i=0; i < 6; i++){
-        var protoItem = new Item("NEW ITEM");
-        protoItem.description = "TEST";
-        items.push(protoItem);
-      }
-
 
       var app = new Vue({
         el: '#app',
         data: {
           items: items,
-          item: protoItem,
+          item: null,
+          mode: "create",
         },
         methods: {
-          newCard: function(){
+          drawCard: function(){
             this.item = this.items[Math.floor( Math.random() * this.items.length)];
+            mode = "change";
+          },
+          newCard: function(){
+            var item = new Item();
+            items.push(item);
+            this.item = item;
+            mode = "create";
           }
-
         }
       })
     </script>
