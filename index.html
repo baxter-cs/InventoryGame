@@ -1,15 +1,19 @@
 <html>
   <head>
 
-    <script>
-      <script src="https://unpkg.com/vue"></script>
-
+    <script src="https://unpkg.com/vue">
     </script>
+
 
   </head>
   <body>
 
-
+    <div id="app">
+      <div>{{ item.name }}</div>
+      <input v-model="item.name" placeholder="edit me"/>
+      <input v-model="item.description" placeholder="edit me"/>
+      <button @click="newCard()">Done</button>
+    </div>
 
 
     <script>
@@ -18,19 +22,20 @@
 
       function Item(name){
         this.name = name;
-        this.descriptions = [];
+        this.proto = true;
+        //this.descriptions = [];
         this.stats = {};
       }
 
       Item.prototype = {
         name: "NULL",
         AddStat: function(stat, value){
-          var statExists = stat.name in this.stats.keys());
+          var statExists = stat.name in this.stats.keys;
           if (statExists){
             var statRecord = this.stats[stat.name];
             statRecord.value += value;
           } else {
-            this.stats[stat.name] : { "stat" : stat, "value" : value };
+            this.stats[stat.name] = { "stat" : stat, "value" : value };
           }
         },
         AddDescription: function(description){
@@ -38,15 +43,26 @@
         }
       }
 
+      for (i=0; i < 6; i++){
+        var protoItem = new Item("NEW ITEM");
+        protoItem.description = "TEST";
+        items.push(protoItem);
+      }
+
+
       var app = new Vue({
         el: '#app',
         data: {
           items: items,
+          item: protoItem,
         },
         methods: {
-
+          newCard: function(){
+            this.item = this.items[Math.floor( Math.random() * this.items.length)];
+          }
 
         }
+      })
     </script>
   </body>
 </html>
