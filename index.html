@@ -1,0 +1,52 @@
+<html>
+  <head>
+
+    <script>
+      <script src="https://unpkg.com/vue"></script>
+
+    </script>
+
+  </head>
+  <body>
+
+
+
+
+    <script>
+      var items = [];
+      var people = [];
+
+      function Item(name){
+        this.name = name;
+        this.descriptions = [];
+        this.stats = {};
+      }
+
+      Item.prototype = {
+        name: "NULL",
+        AddStat: function(stat, value){
+          var statExists = stat.name in this.stats.keys());
+          if (statExists){
+            var statRecord = this.stats[stat.name];
+            statRecord.value += value;
+          } else {
+            this.stats[stat.name] : { "stat" : stat, "value" : value };
+          }
+        },
+        AddDescription: function(description){
+          this.descriptions.push(description);
+        }
+      }
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          items: items,
+        },
+        methods: {
+
+
+        }
+    </script>
+  </body>
+</html>
