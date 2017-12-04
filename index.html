@@ -4,19 +4,41 @@
     <script src="https://unpkg.com/vue">
     </script>
 
+    <style>
+      .item {
+        display: flex;
+        background-color: #EEE;
+      }
+      .item:nth-child(even){
+        background-color: #DDD;
+      }
 
+      .item .name {
+        flex: 1;
+      }
+      .item .description {
+        flex: 4;
+      }
+    </style>
   </head>
   <body>
 
     <div id="app">
-        <div v-if="item">{{ item.name }}</div>
-        <input v-if="item" v-model="item.name" placeholder="edit me"/>
-        <input v-if="item" v-model="item.description" placeholder="edit me"/>
-      <button @click="newCard()">New Card</button>
-      <button v-if="items.length > 0" @click="drawCard()">Draw Card</button>
-      <!--div v-for "item in items">
-        <div>{{ item.name }}</div>
-      </div-->
+      <div v-if="mode != 'done'">
+        <h2 v-if="item">{{ item.name }}</h2>
+          <input v-model="item.name" v-if="mode == 'create'" placeholder="edit me"/>
+        <div>
+          <textarea v-if="mode == 'change'" v-model="item.description" placeholder="edit me"/></textarea>
+        </div>
+        <button v-if="mode != 'done'" @click="done()">Done</button>
+      </div>
+      <div v-if="mode == 'done'">
+        <button @click="newCard()">New Card</button>
+        <button v-if="items.length > 0" @click="drawCard()">Draw Card</button>
+      </div>
+      <div class="item-list" v-if="items.length > 0">
+        <div class="item" v-for="item in items" ><div class="name">{{ item.name }}</div><div class="description">{{ item.description }}</div></div>
+      </div>
 
     </div>
 
@@ -54,18 +76,21 @@
         data: {
           items: items,
           item: null,
-          mode: "create",
+          mode: "done",
         },
         methods: {
+          done: function(){
+            this.mode = 'done';
+          },
           drawCard: function(){
             this.item = this.items[Math.floor( Math.random() * this.items.length)];
-            mode = "change";
+            this.mode = "change";
           },
           newCard: function(){
             var item = new Item();
             items.push(item);
             this.item = item;
-            mode = "create";
+            this.mode = "create";
           }
         }
       })
