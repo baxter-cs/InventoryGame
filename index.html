@@ -7,10 +7,13 @@
     <style>
       .item {
         display: flex;
+        flex-direction: column;
         background-color: #EEE;
-      }
-      .item:nth-child(even){
-        background-color: #DDD;
+        min-width: 500px;
+        flex: 1;
+        padding: 2px;
+        margin: 2px;
+
       }
 
       .item .name {
@@ -19,25 +22,48 @@
       .item .description {
         flex: 4;
       }
+
+      .item-list {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .card-description {
+        min-height: 4em;
+        border: 2px solid black;
+      }
     </style>
   </head>
   <body>
 
     <div id="app">
-      <div v-if="mode != 'done'">
-        <h2 v-if="item">{{ item.name }}</h2>
-          <input v-model="item.name" v-if="mode == 'create'" placeholder="edit me"/>
-        <div>
-          <textarea v-if="mode == 'change'" v-model="item.description" placeholder="edit me"/></textarea>
+      <div v-if="item" id="card-display">
+        <div class="card-name">{{ item.name }}</div>
+        <div class="card-description" v-for="description in item.descriptions">
+          {{ description }}
         </div>
+        <div v-if="mode == 'change'" class="card-description new">{{ itemDescription }}
+        </div>
+      </div>
+      <div id="card-edit" v-if="mode != 'done'">
+        <input v-model="item.name" v-if="mode == 'create'" placeholder="edit me"/>
+      <div>
+        <textarea v-if="mode == 'change'" v-model="itemDescription" placeholder="edit me"/></textarea>
+      </div>
         <button v-if="mode != 'done'" @click="done()">Done</button>
       </div>
+
       <div v-if="mode == 'done'">
         <button @click="newCard()">New Card</button>
         <button v-if="items.length > 0" @click="drawCard()">Draw Card</button>
       </div>
+
+
       <div class="item-list" v-if="items.length > 0">
-        <div class="item" v-for="item in items" ><div class="name">{{ item.name }}</div><div class="description">{{ item.description }}</div></div>
+        <div class="item" v-for="item in items">
+          <div class="name">{{ item.name }}</div>
+          <div class="description"><div v-for="description in item.descriptions">{{ description }}</div>
+        </div>
       </div>
 
     </div>
@@ -50,7 +76,7 @@
       function Item(name){
         this.name = name;
         this.proto = true;
-        //this.descriptions = [];
+        this.descriptions = [];
         this.stats = {};
       }
 
@@ -68,8 +94,7 @@
         AddDescription: function(description){
           this.descriptions.push(description);
         }
-      }
-
+      };
 
       var app = new Vue({
         el: '#app',
@@ -77,9 +102,14 @@
           items: items,
           item: null,
           mode: "done",
+          itemDescription: "",
         },
         methods: {
           done: function(){
+            if (this.item && this.itemDescription) {
+              this.item.descriptions.push(this.itemDescription);
+            }
+            this.itemDescription = "";
             this.mode = 'done';
           },
           drawCard: function(){
@@ -88,12 +118,13 @@
           },
           newCard: function(){
             var item = new Item();
-            items.push(item);
             this.item = item;
+            items.push(item);
             this.mode = "create";
           }
         }
       })
+      for(var i = 0; i < 5; i++){
     </script>
   </body>
 </html>
