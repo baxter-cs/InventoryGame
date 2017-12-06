@@ -32,24 +32,27 @@
         min-height: 4em;
         border: 2px solid black;
       }
+
+      textarea {
+        width: 100%;
+        height: 10em;
+      }
     </style>
   </head>
   <body>
 
     <div id="app">
-      <div v-if="item" id="card-display">
+      <div v-if="item && mode != 'done'" id="card-display">
         <div class="card-name">{{ item.name }}</div>
         <div class="card-description" v-for="description in item.descriptions">
           {{ description }}
         </div>
-        <div v-if="mode == 'change'" class="card-description new">{{ itemDescription }}
+        <div v-if="mode == 'change'" class="card-description new">
+          <textarea v-if="mode == 'change'" v-model="itemDescription" placeholder="edit me"/></textarea>
         </div>
       </div>
       <div id="card-edit" v-if="mode != 'done'">
         <input v-model="item.name" v-if="mode == 'create'" placeholder="edit me"/>
-      <div>
-        <textarea v-if="mode == 'change'" v-model="itemDescription" placeholder="edit me"/></textarea>
-      </div>
         <button v-if="mode != 'done'" @click="done()">Done</button>
       </div>
 
@@ -61,7 +64,8 @@
 
       <div class="item-list" v-if="items.length > 0">
         <div class="item" v-for="item in items">
-          <div class="name">{{ item.name }}</div>
+          <div v-if="item.descriptions.length > 0" class="name">{{ item.name }}</div>
+          <div v-else>??</div>
           <div class="description"><div v-for="description in item.descriptions">{{ description }}</div>
         </div>
       </div>
@@ -124,7 +128,6 @@
           }
         }
       })
-      for(var i = 0; i < 5; i++){
     </script>
   </body>
 </html>
