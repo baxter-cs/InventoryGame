@@ -3,41 +3,7 @@
 
     <script src="https://unpkg.com/vue">
     </script>
-
-    <style>
-      .item {
-        display: flex;
-        flex-direction: column;
-        background-color: #EEE;
-        min-width: 500px;
-        flex: 1;
-        padding: 2px;
-        margin: 2px;
-
-      }
-
-      .item .name {
-        flex: 1;
-      }
-      .item .description {
-        flex: 4;
-      }
-
-      .item-list {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      .card-description {
-        min-height: 4em;
-        border: 2px solid black;
-      }
-
-      textarea {
-        width: 100%;
-        height: 10em;
-      }
-    </style>
+    <link href="style/main.css" rel="stylesheet" >
   </head>
   <body>
 
@@ -66,7 +32,7 @@
         <div class="item" v-for="item in items">
           <div v-if="item.descriptions.length > 0" class="name">{{ item.name }}</div>
           <div v-else>??</div>
-          <div class="description"><div v-for="description in item.descriptions">{{ description }}</div>
+          <div class="description"><div v-for="description in item.descriptions">{{ description }}</div></div>
         </div>
       </div>
 
